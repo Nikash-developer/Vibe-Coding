@@ -31,9 +31,10 @@ export default function Navbar({ onLogin }: NavbarProps) {
             
             <div className="hidden lg:flex items-center gap-6">
               <a href="#" className="nav-link">Home</a>
-              <a href="#" className="nav-link">Browse Opportunities</a>
-              <a href="#" className="nav-link">Trending</a>
-              <a href="#" className="nav-link">About</a>
+              <a href="#browse" className="nav-link">Internships</a>
+              <a href="#browse" className="nav-link">Jobs</a>
+              <a href="#browse" className="nav-link">Courses</a>
+              <a href="#footer" className="nav-link">About</a>
             </div>
           </div>
 

@@ -16,6 +16,7 @@ import Modal from './components/Modal';
 import { MOCK_OPPORTUNITIES } from './constants';
 import { Branch, Year, Opportunity, Status } from './types';
 import { motion, AnimatePresence } from 'motion/react';
+import { Upload } from 'lucide-react';
 
 type View = 'landing' | 'login' | 'dashboard';
 
@@ -116,15 +117,45 @@ export default function App() {
           onSearch={setSearchQuery} 
           onFilterChange={(f) => { setBranch(f.branch); setYear(f.year); }} 
         />
-        
-        <TrendingSection 
-          opportunities={MOCK_OPPORTUNITIES} 
-          onInterestToggle={toggleInterest}
-          interestedIds={interestedIds}
-          onAction={handleAction}
-        />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        {/* Quick Resume Upload Section */}
+        <section className="py-12 bg-white dark:bg-slate-950 border-y border-slate-100 dark:border-slate-900">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="bg-primary/5 rounded-[32px] p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 border border-primary/10">
+              <div className="max-w-md text-center md:text-left">
+                <h2 className="text-2xl md:text-3xl font-display font-bold text-slate-900 dark:text-white mb-4">
+                  Get AI-Powered Career Insights
+                </h2>
+                <p className="text-slate-600 dark:text-slate-400">
+                  Upload your resume to get a personalized career score and matching internship recommendations instantly.
+                </p>
+              </div>
+              <div className="w-full md:w-auto">
+                <button 
+                  onClick={() => setView('login')}
+                  className="w-full md:w-auto flex items-center justify-center gap-3 bg-primary text-white px-8 py-4 rounded-2xl font-bold text-lg hover:bg-primary-dark transition-all shadow-lg hover:shadow-primary/20 active:scale-95"
+                >
+                  <Upload size={20} />
+                  Upload Resume Now
+                </button>
+                <p className="text-[10px] text-slate-400 text-center mt-3 uppercase tracking-widest font-bold">
+                  Supports PDF, PNG, JPG (Max 5MB)
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+        
+        <div id="trending">
+          <TrendingSection 
+            opportunities={MOCK_OPPORTUNITIES} 
+            onInterestToggle={toggleInterest}
+            interestedIds={interestedIds}
+            onAction={handleAction}
+          />
+        </div>
+
+        <div id="browse" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="flex flex-col lg:flex-row gap-12">
             {/* Sidebar Filters */}
             <aside className="w-full lg:w-72 shrink-0">

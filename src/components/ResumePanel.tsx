@@ -7,10 +7,26 @@ export default function ResumePanel() {
   const [isDragging, setIsDragging] = React.useState(false);
   const [uploadedFile, setUploadedFile] = React.useState<string | null>(null);
 
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
+
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(false);
-    setUploadedFile("resume_alex_johnson.pdf");
+    const files = e.dataTransfer.files;
+    if (files && files.length > 0) {
+      setUploadedFile(files[0].name);
+    }
+  };
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      setUploadedFile(files[0].name);
+    }
+  };
+
+  const triggerFileSelect = () => {
+    fileInputRef.current?.click();
   };
 
   return (
@@ -52,10 +68,17 @@ export default function ResumePanel() {
               </div>
               <div>
                 <p className="text-sm font-bold text-slate-900 dark:text-white">Drag & Drop your resume</p>
-                <p className="text-xs text-slate-500 mt-1">Accepted formats: PDF, DOC (Max 5MB)</p>
+                <p className="text-xs text-slate-500 mt-1">Accepted formats: PDF, PNG, JPG (Max 5MB)</p>
               </div>
+              <input 
+                type="file" 
+                ref={fileInputRef}
+                onChange={handleFileSelect}
+                accept=".pdf,.doc,.docx,.png,.jpg,.jpeg"
+                className="hidden"
+              />
               <button 
-                onClick={() => setUploadedFile("resume_alex_johnson.pdf")}
+                onClick={triggerFileSelect}
                 className="btn-primary py-2 text-sm"
               >
                 Upload Resume

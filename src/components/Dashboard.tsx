@@ -38,7 +38,7 @@ export default function Dashboard({ onLogout }: { onLogout: () => void }) {
           </aside>
 
           {/* Right Panel: Opportunities & Learning */}
-          <div className="flex-1 min-w-0">
+          <div id="opportunities-panel" className="flex-1 min-w-0">
             <OpportunitiesPanel onAction={handleAction} />
           </div>
         </motion.div>

@@ -8,6 +8,13 @@ export default function DashboardNavbar({ onLogout }: { onLogout: () => void }) 
   const [showProfile, setShowProfile] = React.useState(false);
   const [showNotifications, setShowNotifications] = React.useState(false);
   const [showAIChat, setShowAIChat] = React.useState(false);
+  const [showEditProfile, setShowEditProfile] = React.useState(false);
+  const [userProfile, setUserProfile] = React.useState({
+    name: 'Alex Johnson',
+    email: 'alex.j@example.com'
+  });
+  const [editName, setEditName] = React.useState(userProfile.name);
+  const [editEmail, setEditEmail] = React.useState(userProfile.email);
   const [chatMessage, setChatMessage] = React.useState('');
   const [chatHistory, setChatHistory] = React.useState<{ role: 'user' | 'ai', text: string }[]>([
     { role: 'ai', text: "Hello! I'm your CareerPulse AI Assistant. How can I help you with your career journey today?" }
@@ -35,6 +42,13 @@ export default function DashboardNavbar({ onLogout }: { onLogout: () => void }) 
     }, 1000);
   };
 
+  const handleSaveProfile = (e: React.FormEvent) => {
+    e.preventDefault();
+    setUserProfile({ name: editName, email: editEmail });
+    setShowEditProfile(false);
+    setShowProfile(false);
+  };
+
   const notifications = [
     { id: 1, text: "New Internship Posted at Google", time: "2h ago", type: "internship" },
     { id: 2, text: "Course Discount 40% on React Mastery", time: "5h ago", type: "course" },
@@ -57,9 +71,9 @@ export default function DashboardNavbar({ onLogout }: { onLogout: () => void }) 
 
           {/* Center: Menu */}
           <div className="hidden md:flex items-center gap-8">
-            <a href="#" className="nav-link nav-link-active">Internships</a>
-            <a href="#" className="nav-link">Courses</a>
-            <a href="#" className="nav-link">Jobs</a>
+            <a href="#opportunities-panel" className="nav-link nav-link-active">Internships</a>
+            <a href="#opportunities-panel" className="nav-link">Courses</a>
+            <a href="#opportunities-panel" className="nav-link">Jobs</a>
             
             <div className="relative">
               <button 
@@ -140,10 +154,16 @@ export default function DashboardNavbar({ onLogout }: { onLogout: () => void }) 
                     className="absolute top-full right-0 mt-2 w-56 bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-800 p-2 overflow-hidden"
                   >
                     <div className="p-3 border-b border-slate-100 dark:border-slate-800 mb-1">
-                      <p className="font-bold text-sm text-slate-900 dark:text-white">Alex Johnson</p>
-                      <p className="text-xs text-slate-500">alex.j@example.com</p>
+                      <p className="font-bold text-sm text-slate-900 dark:text-white">{userProfile.name}</p>
+                      <p className="text-xs text-slate-500">{userProfile.email}</p>
                     </div>
                     <div className="space-y-1">
+                      <button 
+                        onClick={() => { setShowEditProfile(true); setShowProfile(false); }}
+                        className="w-full flex items-center gap-3 px-3 py-2 text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors"
+                      >
+                        <User size={16} /> Edit Profile
+                      </button>
                       <button className="w-full flex items-center gap-3 px-3 py-2 text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors">
                         <Briefcase size={16} /> My Applications
                       </button>
@@ -239,6 +259,62 @@ export default function DashboardNavbar({ onLogout }: { onLogout: () => void }) 
                     className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-primary text-white rounded-xl hover:bg-primary-dark transition-colors"
                   >
                     <Send size={20} />
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Edit Profile Modal */}
+      <AnimatePresence>
+        {showEditProfile && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm">
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="bg-white dark:bg-slate-900 w-full max-w-md rounded-[32px] shadow-2xl border border-slate-100 dark:border-slate-800 overflow-hidden"
+            >
+              <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center">
+                <h3 className="font-display font-bold text-xl text-slate-900 dark:text-white">Edit Profile</h3>
+                <button onClick={() => setShowEditProfile(false)} className="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+                  <X size={24} />
+                </button>
+              </div>
+              <form onSubmit={handleSaveProfile} className="p-6 space-y-4">
+                <div>
+                  <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Full Name</label>
+                  <input 
+                    type="text" 
+                    value={editName}
+                    onChange={(e) => setEditName(e.target.value)}
+                    className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Email Address</label>
+                  <input 
+                    type="email" 
+                    value={editEmail}
+                    onChange={(e) => setEditEmail(e.target.value)}
+                    className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                  />
+                </div>
+                <div className="pt-4 flex gap-3">
+                  <button 
+                    type="button"
+                    onClick={() => setShowEditProfile(false)}
+                    className="flex-1 py-3 rounded-xl border border-slate-200 dark:border-slate-700 font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all"
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    type="submit"
+                    className="flex-1 btn-primary py-3"
+                  >
+                    Save Changes
                   </button>
                 </div>
               </form>
